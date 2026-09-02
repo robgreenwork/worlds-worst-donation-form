@@ -1,0 +1,473 @@
+<title>The Worst Donation Form</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --shock: #0FE3C2;
+    --pink: #FF2E9A;
+    --yellow: #FFE600;
+    --purple: #5B2C87;
+    --ink: #1E1B24;
+    --panel: #F1EFF4;
+    --dim: #9A94A6;
+    --marker: #D80027;
+    --lab-bg: #16141A;
+    --lab-panel: #221E2A;
+    --lab-line: #3A3444;
+    --lab-text: #EDE9F2;
+    --lab-dim: #A79FB4;
+    --lab-accent: #4ED6B8;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--shock);
+    color: var(--ink);
+    font-family: "Times New Roman", Times, serif;
+    padding-bottom: 90px;
+  }
+
+  /* ---------- safety banner ---------- */
+  .warn {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: repeating-linear-gradient(45deg, var(--yellow) 0 18px, #111 18px 36px);
+    padding: 5px;
+  }
+  .warn-inner {
+    background: #111;
+    color: var(--yellow);
+    font-family: "IBM Plex Sans", system-ui, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 9px 14px;
+  }
+
+  .ticker {
+    overflow: hidden;
+    background: var(--pink);
+    color: #fff;
+    border-bottom: 4px ridge var(--yellow);
+    font-family: "Comic Neue", "Comic Sans MS", cursive;
+    font-weight: 700;
+    font-size: 19px;
+    padding: 7px 0;
+    white-space: nowrap;
+  }
+  .ticker span {
+    display: inline-block;
+    padding-left: 100%;
+    animation: slide 18s linear infinite;
+  }
+  @keyframes slide { to { transform: translateX(-100%); } }
+  @media (prefers-reduced-motion: reduce) {
+    .ticker span { animation: none; padding-left: 0; text-align: center; width: 100%; }
+  }
+
+  /* ---------- the specimen ---------- */
+  .page {
+    width: 980px;
+    margin: 26px auto;
+    background: var(--panel);
+    border: 6px outset #C9C2D6;
+    padding: 0 0 30px;
+  }
+
+  header.crest {
+    background: linear-gradient(#6E3AA8, #3C1E60);
+    color: #fff;
+    padding: 22px 26px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .blob {
+    width: 62px; height: 62px; flex: none;
+    border-radius: 50%;
+    background: var(--yellow);
+    border: 4px double var(--pink);
+    display: grid; place-items: center;
+    font-family: "Comic Neue", cursive; font-weight: 700; font-size: 27px; color: var(--purple);
+  }
+  .crest h1 {
+    margin: 0;
+    font-family: "Comic Neue", "Comic Sans MS", cursive;
+    font-weight: 700;
+    font-size: 31px;
+    text-shadow: 2px 2px 0 var(--pink);
+  }
+  .crest p { margin: 3px 0 0; font-size: 13px; color: #D9CCEA; font-style: italic; }
+
+  .strap {
+    text-align: center;
+    padding: 20px 40px 4px;
+    font-size: 15px;
+    line-height: 1.9;
+  }
+
+  .stepbar {
+    text-align: center;
+    font-family: "Comic Neue", cursive;
+    font-weight: 700;
+    color: var(--purple);
+    font-size: 15px;
+    padding: 12px 0 0;
+  }
+
+  form { padding: 6px 40px 0; }
+
+  fieldset {
+    border: 3px groove #B9B2C6;
+    margin: 20px 0 0;
+    padding: 14px 18px 20px;
+    background: #fff;
+  }
+  legend {
+    font-family: "Comic Neue", cursive;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--pink);
+    padding: 0 8px;
+  }
+
+  label { display: block; font-size: 14px; margin: 12px 0 3px; }
+  .req { color: var(--marker); }
+
+  input[type="text"], input[type="email"], select {
+    width: 168px;
+    padding: 3px 5px;
+    font-family: "Times New Roman", serif;
+    font-size: 14px;
+    border: 2px inset #B9B2C6;
+    background: #fff;
+    color: var(--ink);
+  }
+  input:disabled { background: #E4E1E9; color: #8C8698; }
+  input:focus-visible, select:focus-visible, button:focus-visible, .toggle:focus-visible {
+    outline: 3px solid var(--purple);
+    outline-offset: 2px;
+  }
+
+  .amount-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .amount {
+    font-family: "Comic Neue", cursive;
+    font-weight: 700;
+    font-size: 21px;
+    background: #DAD5E2;
+    border: 2px outset #fff;
+    padding: 9px 20px;
+    cursor: pointer;
+    color: var(--ink);
+  }
+  .amount-note { font-size: 13px; font-style: italic; color: #5C5668; }
+
+  .checks { margin-top: 10px; }
+  .checks div { margin: 7px 0; font-size: 14px; }
+  .checks input { margin-right: 7px; }
+
+  .smallprint {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 8px;
+    line-height: 1.45;
+    color: #B4AFBD;
+    text-align: justify;
+    margin: 16px 0 0;
+  }
+
+  .go {
+    display: block;
+    margin: 24px auto 6px;
+    background: var(--purple);
+    color: #fff;
+    font-family: "Comic Neue", cursive;
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: 0.16em;
+    border: 3px outset #9B79C4;
+    padding: 11px 40px;
+    cursor: pointer;
+  }
+  .go:active { border-style: inset; }
+
+  .errorbar {
+    display: none;
+    background: #FFD9D9;
+    border: 2px solid var(--marker);
+    color: #8A0016;
+    font-family: "Courier New", monospace;
+    font-size: 13px;
+    padding: 9px 12px;
+    margin: 18px 40px 0;
+  }
+  .errorbar.on { display: block; }
+
+  footer.junk {
+    text-align: center;
+    font-size: 11px;
+    color: #6E687A;
+    padding: 22px 40px 0;
+  }
+  footer.junk a { color: #2727C4; }
+
+  /* ---------- diagnostic layer ---------- */
+  .m {
+    display: none;
+    background: var(--marker);
+    color: #fff;
+    font-family: "IBM Plex Sans", system-ui, sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 18px;
+    width: 19px; height: 19px;
+    border-radius: 50%;
+    text-align: center;
+    vertical-align: 2px;
+    margin-left: 6px;
+  }
+  body.diagnose .m { display: inline-block; }
+
+  .toggle {
+    position: fixed;
+    right: 22px; bottom: 22px;
+    z-index: 50;
+    background: var(--lab-bg);
+    color: var(--lab-text);
+    font-family: "IBM Plex Sans", system-ui, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    border: 1px solid var(--lab-line);
+    border-radius: 8px;
+    padding: 13px 20px;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  }
+
+  .lab {
+    position: fixed;
+    top: 0; right: 0; bottom: 0;
+    width: 430px;
+    max-width: 92vw;
+    background: var(--lab-bg);
+    color: var(--lab-text);
+    font-family: "IBM Plex Sans", system-ui, sans-serif;
+    border-left: 1px solid var(--lab-line);
+    transform: translateX(101%);
+    transition: transform 0.28s ease;
+    overflow-y: auto;
+    z-index: 60;
+    padding: 26px 26px 90px;
+  }
+  body.diagnose .lab { transform: none; }
+  @media (prefers-reduced-motion: reduce) { .lab { transition: none; } }
+
+  .lab h2 { margin: 0; font-size: 20px; font-weight: 600; letter-spacing: -0.01em; }
+  .lab .sub { margin: 6px 0 22px; font-size: 13px; color: var(--lab-dim); line-height: 1.5; }
+
+  .grp { margin-bottom: 22px; }
+  .grp h3 {
+    margin: 0 0 10px;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--lab-accent);
+    font-weight: 600;
+  }
+  .fault {
+    display: grid;
+    grid-template-columns: 22px 1fr;
+    gap: 10px;
+    padding: 9px 0;
+    border-top: 1px solid var(--lab-line);
+  }
+  .fault .n {
+    background: var(--marker);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    display: grid; place-items: center;
+  }
+  .fault p { margin: 0; font-size: 13.5px; line-height: 1.45; }
+  .fault .fix { color: var(--lab-dim); margin-top: 3px; }
+  .fault .fix b { color: var(--lab-accent); font-weight: 600; }
+
+  .lab-close {
+    background: none;
+    border: 1px solid var(--lab-line);
+    color: var(--lab-dim);
+    border-radius: 6px;
+    padding: 7px 12px;
+    font-family: inherit;
+    font-size: 12px;
+    cursor: pointer;
+    margin-top: 6px;
+  }
+</style>
+
+<div class="warn">
+  <div class="warn-inner">Parody. Fictional charity. Nothing on this page is submitted or stored. Do not enter real details.</div>
+</div>
+
+<div class="ticker"><span>&#9733; WELCOME TO OUR DONATION PAGE &#9733; PLEASE GIVE GENEROUSLY &#9733; BEST VIEWED AT 1024x768 &#9733; SITE UPDATED 14 MARCH 2011 &#9733; WELCOME TO OUR DONATION PAGE &#9733;</span></div>
+
+<div class="page">
+  <header class="crest">
+    <div class="blob">WCF</div>
+    <div>
+      <h1>The Worthy Cause Foundation</h1>
+      <p>Registered somewhere. Doing good things since 1997.</p>
+    </div>
+  </header>
+
+  <p class="strap">Thank you for choosing to support The Worthy Cause Foundation, a charity that does a wide variety of important work in a number of areas across many different communities, and whose ongoing programmes are made possible entirely through the generosity of supporters such as your good self, without whom none of it would be possible at all.<span class="m">9</span></p>
+
+  <div class="stepbar">Step 3 of ?<span class="m">14</span></div>
+
+  <div class="errorbar" id="err">ERROR 0x80070005: INVALID INPUT. PLEASE TRY AGAIN.</div>
+
+  <form id="theform" novalidate>
+    <fieldset>
+      <legend>Your gift</legend>
+      <div class="amount-row">
+        <button type="button" class="amount" id="amt">$250.00<span class="m">2</span></button>
+        <span class="amount-note">Annual gift<span class="m">1</span>. All donations processed in US dollars.<span class="m">4</span></span>
+      </div>
+      <p style="font-size:14px;margin:14px 0 0">To give a different amount, telephone the office on Tuesdays and Thursdays between 10am and 12pm.<span class="m">3</span></p>
+      <p style="font-size:14px;margin:8px 0 0">Your gift helps.<span class="m">12</span></p>
+    </fieldset>
+
+    <fieldset>
+      <legend>About you</legend>
+      <label for="f1">Full name <span class="req">*</span></label>
+      <input type="text" id="f1">
+      <label for="f2">Date of birth <span class="req">*</span><span class="m">17</span></label>
+      <input type="text" id="f2" placeholder="DD/MM/YYYY">
+      <label for="f3">Mother's maiden name <span class="req">*</span></label>
+      <input type="text" id="f3">
+      <label for="f4">Employer <span class="req">*</span></label>
+      <input type="text" id="f4">
+      <label for="f5">Annual household income <span class="req">*</span></label>
+      <select id="f5">
+        <option>Please select</option>
+        <option>Under &pound;20,000</option>
+        <option>&pound;20,000 to &pound;49,999</option>
+        <option>&pound;50,000 or more</option>
+        <option>I would rather not say</option>
+      </select>
+    </fieldset>
+
+    <fieldset>
+      <legend>How to pay</legend>
+      <div class="checks">
+        <div><input type="radio" name="pay" id="p1" checked><label for="p1" style="display:inline">Cheque by post<span class="m">5</span></label></div>
+        <div><input type="radio" name="pay" id="p2"><label for="p2" style="display:inline">Bank transfer (details sent within 28 days)</label></div>
+      </div>
+      <label for="card" style="margin-top:16px">Card number (card payments coming soon, 2019)</label>
+      <input type="text" id="card" placeholder="Unavailable" disabled>
+      <input type="text" id="card2" placeholder="Confirm by re-typing" disabled style="margin-left:8px">
+      <p style="font-size:13px;margin:14px 0 0;color:#5C5668">This form is not encrypted, probably.<span class="m">19</span></p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Keeping in touch</legend>
+      <div class="checks">
+        <div><input type="checkbox" id="c1" checked><label for="c1" style="display:inline">Contact me by post</label></div>
+        <div><input type="checkbox" id="c2" checked><label for="c2" style="display:inline">Contact me by email</label></div>
+        <div><input type="checkbox" id="c3" checked><label for="c3" style="display:inline">Contact me by telephone</label></div>
+        <div><input type="checkbox" id="c4" checked><label for="c4" style="display:inline">Contact me by text message<span class="m">15</span></label></div>
+        <div><input type="checkbox" id="c5" checked><label for="c5" style="display:inline">Yes, increase my gift by 25&percnt; every year automatically<span class="m">16</span></label></div>
+      </div>
+      <p class="smallprint">By proceeding you agree that your information may be shared with our 400 trusted partners and their affiliates for purposes including but not limited to marketing, research, profiling, wealth screening and such other purposes as we may determine from time to time without further notice to you, and you confirm that you have read and accepted the terms and conditions which are available on request by writing to the address below.<span class="m">18</span></p>
+    </fieldset>
+
+    <button type="submit" class="go">PROCEED<span class="m">11</span></button>
+  </form>
+
+  <footer class="junk">
+    <a href="#0">Home</a> &nbsp;|&nbsp; <a href="#0">About</a> &nbsp;|&nbsp; <a href="#0">Contact</a> &nbsp;|&nbsp; <a href="#0">Link</a><br>
+    Best viewed in Internet Explorer at 1024x768.<span class="m">7</span> This page does not work on mobile telephones.<br>
+    &copy; 2011 The Worthy Cause Foundation
+  </footer>
+</div>
+
+<button class="toggle" id="toggle" aria-expanded="false" aria-controls="lab">Diagnose this form</button>
+
+<aside class="lab" id="lab" aria-label="What is wrong with this form">
+  <h2>Nineteen faults, four headings</h2>
+  <p class="sub">Every marker on the form maps to one of the FACT headings. The green line under each is the change you would actually make.</p>
+
+  <div class="grp">
+    <h3>Freedom</h3>
+    <div class="fault"><span class="n">1</span><div><p>One frequency only, an annual gift.</p><p class="fix"><b>Do</b> offer single and regular, and lead with regular.</p></div></div>
+    <div class="fault"><span class="n">2</span><div><p>One amount, $250, take it or leave it.</p><p class="fix"><b>Do</b> offer three amounts that suit the audience, low to high.</p></div></div>
+    <div class="fault"><span class="n">3</span><div><p>Other amounts require a phone call, on two days a week.</p><p class="fix"><b>Do</b> put a free amount field next to the suggestions.</p></div></div>
+    <div class="fault"><span class="n">4</span><div><p>Dollars only, from a charity whose donors are in pounds.</p><p class="fix"><b>Do</b> price in the donor's currency, or let them choose.</p></div></div>
+    <div class="fault"><span class="n">5</span><div><p>Cheque or bank transfer. No card, no wallets.</p><p class="fix"><b>Do</b> add card, Apple Pay, Google Pay and PayPal.</p></div></div>
+  </div>
+
+  <div class="grp">
+    <h3>Aesthetics</h3>
+    <div class="fault"><span class="n">7</span><div><p>Fixed 980 pixels wide, and it says so in the footer.</p><p class="fix"><b>Do</b> build mobile first, where most donors actually are.</p></div></div>
+    <div class="fault"><span class="n">9</span><div><p>Centred body copy, one sentence, ninety words long.</p><p class="fix"><b>Do</b> left align, and cut the strapline to one line.</p></div></div>
+    <div class="fault"><span class="n">6</span><div><p>Three clashing typefaces and a scrolling banner.</p><p class="fix"><b>Do</b> pick two faces, and let the form be the loudest thing.</p></div></div>
+    <div class="fault"><span class="n">10</span><div><p>The amount button gives no sign it has been selected.</p><p class="fix"><b>Do</b> give every control a visible selected state.</p></div></div>
+  </div>
+
+  <div class="grp">
+    <h3>Context</h3>
+    <div class="fault"><span class="n">11</span><div><p>The button says PROCEED, so nobody knows what happens next.</p><p class="fix"><b>Do</b> label it "Give $250 a year".</p></div></div>
+    <div class="fault"><span class="n">12</span><div><p>"Your gift helps." No impact copy tied to the amount.</p><p class="fix"><b>Do</b> say what this specific amount pays for.</p></div></div>
+    <div class="fault"><span class="n">13</span><div><p>Errors give a hex code, name no field, and wipe the form.</p><p class="fix"><b>Do</b> mark the field, say what is wrong, keep everything typed.</p></div></div>
+    <div class="fault"><span class="n">14</span><div><p>"Step 3 of ?" tells the donor nothing about what is left.</p><p class="fix"><b>Do</b> number the steps honestly, or cut them down.</p></div></div>
+  </div>
+
+  <div class="grp">
+    <h3>Transparency</h3>
+    <div class="fault"><span class="n">15</span><div><p>All four contact channels pre-ticked.</p><p class="fix"><b>Do</b> leave every opt in unticked and let people choose.</p></div></div>
+    <div class="fault"><span class="n">16</span><div><p>A pre-ticked automatic annual uplift, buried in the list.</p><p class="fix"><b>Do</b> ask for the upgrade separately, or not at all.</p></div></div>
+    <div class="fault"><span class="n">17</span><div><p>Date of birth, maiden name, employer and income, all required.</p><p class="fix"><b>Do</b> keep only the fields the gift and Gift Aid need.</p></div></div>
+    <div class="fault"><span class="n">18</span><div><p>Four hundred trusted partners, in eight point grey.</p><p class="fix"><b>Do</b> say who gets the data, in the same size as everything else.</p></div></div>
+    <div class="fault"><span class="n">19</span><div><p>No padlock, no gateway, no reassurance of any kind.</p><p class="fix"><b>Do</b> show the payment marks and say the page is secure.</p></div></div>
+  </div>
+
+  <button class="lab-close" id="close">Close panel</button>
+</aside>
+
+<script>
+  var body = document.body;
+  var toggle = document.getElementById('toggle');
+  var close = document.getElementById('close');
+
+  function setDiagnose(on) {
+    body.classList.toggle('diagnose', on);
+    toggle.setAttribute('aria-expanded', on ? 'true' : 'false');
+    toggle.textContent = on ? 'Hide the diagnosis' : 'Diagnose this form';
+  }
+  toggle.addEventListener('click', function () {
+    setDiagnose(!body.classList.contains('diagnose'));
+  });
+  close.addEventListener('click', function () { setDiagnose(false); });
+
+  document.getElementById('theform').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var err = document.getElementById('err');
+    err.classList.add('on');
+    this.reset();
+    document.getElementById('c1').checked = true;
+    document.getElementById('c2').checked = true;
+    document.getElementById('c3').checked = true;
+    document.getElementById('c4').checked = true;
+    document.getElementById('c5').checked = true;
+    err.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+
+  document.getElementById('amt').addEventListener('click', function () {
+    // deliberately does nothing visible
+  });
+</script>
